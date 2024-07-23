@@ -1,0 +1,9 @@
+.custom-card {
+  min-height: 100vh;
+}
+.profile-loading{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}

@@ -1,0 +1,149 @@
+.logo-wrapper {
+  padding: 5.2rem 0 0 6.1rem;
+  cursor: pointer;
+}
+.logo {
+  width: 4.4rem;
+  height: 4.1rem;
+  flex-shrink: 0;
+  margin-right: 1.3rem;
+}
+.logo-text {
+  color: var(--primary-color);
+  font-family: Poppins;
+  font-size: 2.7rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 2.6rem;
+}
+.form-block {
+  width: 52.9rem;
+  min-height: 50rem;
+  flex-shrink: 0;
+  border-radius: 1rem;
+  background: var(--secondary-color);
+  box-shadow: 0rem 0rem 0.3rem 0.2rem rgba(151, 151, 151, 0.25);
+}
+.mainLogo-text {
+  color: var(--primary-color);
+  font-family: Poppins;
+  font-size: 7.3rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 2.6rem;
+  margin-top: 6rem;
+}
+.mainImg {
+  width: 55.3rem;
+  height: 55.9rem !important;
+  flex-shrink: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.create-acc {
+  color: var(--primary-color);
+  font-family: Poppins;
+  font-size: 3.6rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 2.6rem;
+  margin: 6.2rem 0 2.9rem 5.1rem;
+}
+.create-text {
+  color: var(--text-color);
+  font-family: Poppins;
+  font-size: 2.1em;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 2.6rem; /* 123.81% */
+  margin: 0 0 3.7rem 5.5rem;
+}
+.input-border-bottom {
+  max-width: 430px;
+  border: none;
+  border-bottom: 1px solid #515151;
+  padding: 5px 0;
+  box-sizing: border-box;
+  outline: none;
+  margin: 0 0 5rem 5.5rem;
+  font-size: 1.6rem;
+}
+.input-border-bottom:focus {
+  border-bottom: 1px solid #515151;
+}
+.input-border-bottom::placeholder {
+  color: #858484;
+  font-family: Poppins;
+  font-size: 1.6rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 2.6rem; /* 162.5% */
+}
+.btn-wrapper {
+  width: 430px;
+  height: 45px;
+  flex-shrink: 0;
+  border-radius: 5px;
+  border: 1px solid #9b9898;
+  background: #fff;
+  color: #515151;
+  font-family: Poppins;
+  font-size: 2rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 2.6rem; /* 130% */
+}
+.already {
+  color: #515151;
+  font-family: Poppins;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 2.6rem; /* 173.333% */
+}
+.log {
+  color: #515151;
+  font-family: Poppins;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 2.6rem;
+  cursor: pointer;
+}
+.load-ani{
+  position: relative;
+  margin: auto;
+}
+
+@media (max-width: 992px) {
+  .btn-wrapper {
+    width: 100%;
+    max-width: 90%;
+    margin: 0 auto;
+  }
+  .create-acc {
+    font-size: 3rem;
+  }
+  .mainLogo-text {
+    font-size: 5rem;
+  }
+  .input-border-bottom {
+    margin: 0 0 5rem 1.5rem;
+  }
+}
+
+@media (max-width: 490px) {
+  .btn-wrapper {
+    width: 100%;
+    max-width: 95%;
+    margin: 0 auto;
+  }
+  .input-border-bottom {
+    margin: 0 0 5rem 1.5rem;
+  }
+  .create-acc,
+  .create-text {
+    margin-left: 1rem;
+  }
+}

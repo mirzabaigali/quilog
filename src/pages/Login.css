@@ -1,0 +1,60 @@
+.remember {
+  width: 45rem;
+  height: 5rem;
+  flex-shrink: 0;
+  display: flex !important;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.rem-text {
+  color: #515151;
+  font-family: Poppins;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 2.6rem; /* 173.333% */
+  cursor: pointer;
+}
+.custom-checkbox {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  border-radius: 1rem !important;
+  background: #fff;
+  box-shadow: 0rem 0rem 0.3rem 0.2rem rgba(151, 151, 151, 0.25);
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+  margin-right: 0.5rem;
+}
+.custom-checkbox:checked::before {
+  content: "\2714";
+  font-size: 2rem;
+  color: gray !important;
+  width: 1rem;
+  height: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 2rem;
+}
+
+@media (max-width: 995px) {
+  .remember {
+    width: 35rem;
+  }
+}
+@media (max-width: 375px) {
+  .remember {
+    width: 27rem;
+    height: auto;
+    display: inline-block !important;
+  }
+}

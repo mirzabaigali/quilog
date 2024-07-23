@@ -1,0 +1,56 @@
+.main-content {
+  margin-top: 8rem;
+}
+.main-text {
+  color: #000;
+  font-family: Poppins;
+  font-size: 7.2rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 7.6rem;
+  /* position: absolute; */
+}
+/* .readbtncontent {
+  position: relative;
+  bottom: 0.8rem;
+  z-index: 1;
+} */
+.readBtn {
+  width: 28.4rem;
+  height: 8.3rem;
+  border-radius: 5rem;
+  background: #fff;
+  box-shadow: 0 0.4rem 0.4rem 0px rgba(0, 0, 0, 0.25);
+  color: #000;
+  font-family: Poppins;
+  font-size: 2.7rem;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 2.6rem;
+}
+.eye {
+  width: 5.5rem;
+  height: 5.5rem;
+  /* margin-right: 0.7rem; */
+}
+@media (max-width: 575px) {
+  .readBtn {
+    width: 20rem;
+    font-size: 2rem;
+  }
+}
+@media (max-width: 430px) {
+  .main-text {
+    font-size: 4.5rem;
+  }
+  .readBtn {
+    font-size: 1.8rem;
+  }
+}
+@media (max-width: 390px) {
+  .readBtn {
+    width: 15rem;
+    height: 7rem;
+    font-size: 1rem;
+  }
+}

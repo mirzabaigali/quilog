@@ -1,0 +1,24 @@
+.custom-inputs {
+  margin-bottom: 2rem;
+}
+label {
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+}
+input,
+textarea::placeholder {
+  color: #858484;
+  font-family: Poppins;
+  font-size: 1.6rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 2.6rem; /* 162.5% */
+}
+p{
+  color: #515151;
+  font-family: Poppins;
+  font-size: 1.6rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 2.6rem; /* 162.5% */
+}
