@@ -1,0 +1,4 @@
+.liked {
+  filter: brightness(0) saturate(100%) invert(34%) sepia(85%) saturate(6845%)
+    hue-rotate(165deg) brightness(96%) contrast(91%);
+}

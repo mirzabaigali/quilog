@@ -5,6 +5,11 @@ import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../firebase-client/config";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
+import whatsapp from "../assets/ic_baseline-whatsapp.svg";
+import insta from "../assets/mdi_instagram.svg";
+import linke from "../assets/mdi_linkedin.svg";
+import twit from "../assets/iconoir_twitter.svg";
+import fb from "../assets/circum_facebook.svg";
 import { getAuth } from "firebase/auth";
 import "./Profile.css";
 import showToast from "../utilities/Toast";
@@ -14,6 +19,19 @@ const Profile = () => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+
+  console.log(userData)
+
+
+  // Check if user is authenticated and has local or session storage user data
+  const localUser =
+    sessionStorage.getItem("userData") || localStorage.getItem("userData");
+  const loaclUserString = localUser ? JSON.parse(localUser) : null;
+
+  // Get the current authenticated user from Firebase Authentication
+  const auth = getAuth();
+  const userAuth = auth.currentUser;
+  console.log(userAuth);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -81,14 +99,19 @@ const Profile = () => {
                 <div className="row">
                   <div className="col-sm-3 text-center">
                     <img
-                      src="https://openui.fly.dev/openui/128x128.svg?text=👤"
+                      // src="https://openui.fly.dev/openui/128x128.svg?text=👤"
+                      src={
+                        userAuth.photoURL ||
+                        "https://openui.fly.dev/openui/128x128.svg?text=👤"
+                      }
                       alt="User Profile Picture"
                       className="img-fluid img-thumbnail rounded-circle p-3 mt-1"
+                      loading="lazy"
                     />
                   </div>
                   <div className="col-sm-9">
                     <h4 className="card-title">
-                      Name : {name}
+                      Name : {name || loaclUserString?.name}
                       <br />
                       Email : {email}
                     </h4>
@@ -112,21 +135,36 @@ const Profile = () => {
                         My Social Media Handle
                       </h3>
                       <div className="flex flex-col mt-2">
-                        <p className="text-muted-foreground">
-                          📞 +91-{phone || `NA`}
-                        </p>
-                        <p className="text-muted-foreground">
-                          {facebook || `NA`}
-                        </p>
-                        <p className="text-muted-foreground">
-                          {instagram || `NA`}
-                        </p>
-                        <p className="text-muted-foreground">
-                          {twitter || `NA`}
-                        </p>
-                        <p className="text-muted-foreground">
-                          {linkedin || `NA`}
-                        </p>
+                        <div className="d-flex gap-3">
+                          <img src={whatsapp} alt="whats" loading="lazy" />
+                          <p className="text-muted-foreground my-3">
+                            +91-{phone || `NA`}
+                          </p>
+                        </div>
+                        <div className="d-flex gap-3">
+                          <img src={fb} alt="fb" loading="lazy" />
+                          <p className="text-muted-foreground my-3">
+                            {facebook || `NA`}
+                          </p>
+                        </div>
+                        <div className="d-flex gap-3">
+                          <img src={insta} alt="inst" loading="lazy" />
+                          <p className="text-muted-foreground my-3">
+                            {instagram || `NA`}
+                          </p>
+                        </div>
+                        <div className="d-flex gap-3">
+                          <img src={twit} alt="twit" loading="lazy" />
+                          <p className="text-muted-foreground my-3">
+                            {twitter || `NA`}
+                          </p>
+                        </div>
+                        <div className="d-flex gap-3">
+                          <img src={linke} alt="linke" loading="lazy" />
+                          <p className="text-muted-foreground my-3">
+                            {linkedin || `NA`}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>

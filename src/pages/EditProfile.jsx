@@ -109,8 +109,20 @@ const EditProfileModal = ({ showModal, handleClose }) => {
         } else {
           await updateProfileInFirestore(updateData); // Update Firestore with new profile data
           showToast("Profile updated successfully!", "success");
-          await auth.signOut();
-          navigate("/login");
+          setUserData({
+            name: "",
+            email: "",
+            password: "",
+            phone: "",
+            linkedin: "",
+            instagram: "",
+            twitter: "",
+            facebook: "",
+          })
+          handleClose();
+          navigate("/")
+          // await auth.signOut();
+          // navigate("/login");
         }
       }
     } catch (error) {
