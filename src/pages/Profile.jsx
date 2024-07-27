@@ -1,44 +1,33 @@
+//start
 import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import EditProfileModal from "./EditProfile";
 import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "../firebase-client/config";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import whatsapp from "../assets/ic_baseline-whatsapp.svg";
 import insta from "../assets/mdi_instagram.svg";
 import linke from "../assets/mdi_linkedin.svg";
 import twit from "../assets/iconoir_twitter.svg";
 import fb from "../assets/circum_facebook.svg";
-import { getAuth } from "firebase/auth";
 import "./Profile.css";
 import showToast from "../utilities/Toast";
 
 const Profile = () => {
+  const { userId } = useParams();
   const [showModal, setShowModal] = useState(false);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
-  console.log(userData)
-
-
-  // Check if user is authenticated and has local or session storage user data
-  const localUser =
-    sessionStorage.getItem("userData") || localStorage.getItem("userData");
-  const loaclUserString = localUser ? JSON.parse(localUser) : null;
-
-  // Get the current authenticated user from Firebase Authentication
-  const auth = getAuth();
-  const userAuth = auth.currentUser;
-  console.log(userAuth);
+  const authUser = auth.currentUser;
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        const userId = user.uid;
+        const targetUserId = userId || user.uid; // Use route parameter or current user ID
         try {
-          const userDoc = await getDoc(doc(db, "users", userId));
+          const userDoc = await getDoc(doc(db, "users", targetUserId));
           if (userDoc.exists()) {
             setUserData(userDoc.data());
           } else {
@@ -59,14 +48,13 @@ const Profile = () => {
 
     // Cleanup subscription on component unmount
     return () => unsubscribe();
-  }, [navigate]);
+  }, [navigate, userId]);
 
-  // Handle cases where user is not authenticated or data is still loading
   if (loading) {
     return <div className="profile-loading">Loading...</div>;
   }
 
-  if (!auth.currentUser?.uid) {
+  if (!authUser?.uid) {
     navigate("/");
     return null;
   }
@@ -83,8 +71,8 @@ const Profile = () => {
     instagram,
     twitter,
     linkedin,
-  } = userData;
-
+  } = userData || {};
+  console.log(userData);
   return (
     <>
       <Navbar />
@@ -99,9 +87,9 @@ const Profile = () => {
                 <div className="row">
                   <div className="col-sm-3 text-center">
                     <img
-                      // src="https://openui.fly.dev/openui/128x128.svg?text=👤"
                       src={
-                        userAuth.photoURL ||
+                        userData?.photoURL ||
+                        userData.photo ||
                         "https://openui.fly.dev/openui/128x128.svg?text=👤"
                       }
                       alt="User Profile Picture"
@@ -111,9 +99,9 @@ const Profile = () => {
                   </div>
                   <div className="col-sm-9">
                     <h4 className="card-title">
-                      Name : {name || loaclUserString?.name}
+                      Name : {name || "N/A"}
                       <br />
-                      Email : {email}
+                      Email : {email || "N/A"}
                     </h4>
                     <p className="card-text">
                       {profession || "No profession Provided"}
@@ -168,15 +156,17 @@ const Profile = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-12 text-end">
-                    <button
-                      type="button"
-                      className="btn btn-lg btn-outline-primary"
-                      onClick={handleShowModal}
-                    >
-                      Edit Profile
-                    </button>
-                  </div>
+                  {!userId && ( // Only show Edit Profile button if it's the current user
+                    <div className="col-12 text-end">
+                      <button
+                        type="button"
+                        className="btn btn-lg btn-outline-primary"
+                        onClick={handleShowModal}
+                      >
+                        Edit Profile
+                      </button>
+                    </div>
+                  )}
                   <EditProfileModal
                     showModal={showModal}
                     handleClose={handleCloseModal}

@@ -1,3 +1,4 @@
+//start
 import React, { useEffect, useState } from "react";
 import logo from "../assets/fluent-mdl2_blog.png";
 import user from "../assets/mdi_user.svg";
@@ -7,6 +8,7 @@ import { auth, db } from "../firebase-client/config";
 import { doc, getDoc } from "firebase/firestore";
 import "./Navbar.css";
 import Skeleton from "../utilities/Skeleton";
+
 const Navbar = () => {
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState(null);
@@ -35,34 +37,22 @@ const Navbar = () => {
     fetchUserData();
   }, [auth?.currentUser?.displayName]);
 
-  // Get tokens and user data from session storage and local storage
-  // const userInfoString = userInfo ? JSON.parse(userInfo) : null;
-
-  // Get tokens and user data from session storage and local storage
   const token =
     sessionStorage.getItem("token") || localStorage.getItem("token");
 
   const userDataString =
     sessionStorage.getItem("userData") || localStorage.getItem("userData");
 
-  // this is the local storage if firebase fails then it is for backup
   const userData = userDataString ? JSON.parse(userDataString) : null;
 
-  //handle logout
   const handleLogout = () => {
     auth.signOut().then(() => {
-      // remove tokens and user data from session storage
       sessionStorage.removeItem("token");
       sessionStorage.removeItem("userData");
-
-      // remove tokens and user data from local storage
       localStorage.removeItem("token");
       localStorage.removeItem("userData");
-
-      // remove alert shown from session storage and local storage
       sessionStorage.removeItem("alertShown");
       localStorage.removeItem("alertShown");
-
       navigate("/login");
     });
   };
@@ -84,7 +74,6 @@ const Navbar = () => {
                 {loading ? (
                   <Skeleton width="100px" height="20px" />
                 ) : (
-                  // not using direct auth because the if we change the name it is not update due to the diplayname property from  firebase storing and using sesssion and local storage
                   `Hey, ${userInfo?.name || userData?.name}`
                 )}
               </span>
@@ -123,8 +112,21 @@ const Navbar = () => {
                       </button>
                     </li>
                     <li>
-                      <button className="dropdown-item" type="button">
+                      <button
+                        className="dropdown-item"
+                        type="button"
+                        onClick={() => navigate("/my-blogs")}
+                      >
                         My Blogs
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        className="dropdown-item"
+                        type="button"
+                        onClick={() => navigate("/settings")}
+                      >
+                        Settings
                       </button>
                     </li>
                     <li>
@@ -133,7 +135,7 @@ const Navbar = () => {
                         type="button"
                         onClick={handleLogout}
                       >
-                        logout
+                        Logout
                       </button>
                     </li>
                   </ul>
