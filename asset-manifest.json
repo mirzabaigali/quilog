@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/quilog/static/css/main.88e38c8e.css",
-    "main.js": "/quilog/static/js/main.23e08b5d.js",
+    "main.js": "/quilog/static/js/main.b4f69c1b.js",
     "static/js/453.ab5f8409.chunk.js": "/quilog/static/js/453.ab5f8409.chunk.js",
     "static/media/background.jpg": "/quilog/static/media/background.4a094a8cc415f1526c92.jpg",
     "static/media/signuplogo.png": "/quilog/static/media/signuplogo.4c768b03902d64ed7e98.png",
@@ -20,11 +20,11 @@
     "static/media/ic-baseline-plus.svg": "/quilog/static/media/ic-baseline-plus.f94795c8bac3d277b8fac6006bc15762.svg",
     "static/media/Ellipse 2.svg": "/quilog/static/media/Ellipse 2.d95b375624f14916c52eaa5af2372107.svg",
     "main.88e38c8e.css.map": "/quilog/static/css/main.88e38c8e.css.map",
-    "main.23e08b5d.js.map": "/quilog/static/js/main.23e08b5d.js.map",
+    "main.b4f69c1b.js.map": "/quilog/static/js/main.b4f69c1b.js.map",
     "453.ab5f8409.chunk.js.map": "/quilog/static/js/453.ab5f8409.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.88e38c8e.css",
-    "static/js/main.23e08b5d.js"
+    "static/js/main.b4f69c1b.js"
   ]
 }
