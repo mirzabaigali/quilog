@@ -14,13 +14,17 @@ import {
   doc,
 } from "../firebase-client/config";
 import { getAuth } from "firebase/auth";
+import { getDoc } from "firebase/firestore";
+import { useNavigate, useParams } from "react-router-dom";
 import "./CreateaBlog.css";
-import { json } from "react-router-dom";
 
 const CreateaBlog = () => {
+  const { blogId } = useParams();
   const auth = getAuth();
+  const navigate = useNavigate();
   const showToastDebounced = debounce(showToast, 300);
   const [loading, setLoading] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
   const [contentLength, setContentLength] = useState(0);
   const [formData, setFormData] = useState({
     blog: "",
@@ -33,6 +37,63 @@ const CreateaBlog = () => {
     category: "",
   });
 
+  //fetching user from collections users
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const userId = auth.currentUser?.uid;
+      if (userId) {
+        try {
+          const userDoc = await getDoc(doc(db, "users", userId));
+          if (userDoc.exists()) {
+            const data = userDoc.data();
+            setUserInfo(data);
+          } else {
+            console.error("No such document!");
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+    fetchUserData();
+  }, [auth?.currentUser?.displayName]);
+
+  // Fetch blog data for editing
+  useEffect(() => {
+    if (blogId) {
+      const fetchBlogData = async () => {
+        try {
+          const blogDoc = await getDoc(doc(db, "blogs", blogId));
+          if (blogDoc.exists()) {
+            const data = blogDoc.data();
+            setFormData({
+              blog: data.blogTitle || "",
+              content: data.content || "",
+              author: data.author || "",
+              tags: data.tags || "",
+              publishDates: data.publishDates || "",
+              category: data.category || "",
+            });
+            console.log("formData.content:", formData.content);
+
+            showToastDebounced("Blog loaded for editing!", "info");
+          } else {
+            showToastDebounced("Blog not found!", "error");
+            navigate("/feed"); // Navigate back to feed if blog not found
+          }
+        } catch (error) {
+          console.error("Error fetching blog data:", error);
+          showToastDebounced("Error loading blog data!", "error");
+        }
+      };
+      fetchBlogData();
+    }
+  }, [blogId, navigate]);
+
+  console.log(formData);
+
   useEffect(() => {
     scrollToTop();
     const savedDraft = sessionStorage.getItem("blogDraft");
@@ -44,7 +105,11 @@ const CreateaBlog = () => {
     }
   }, []);
   useEffect(() => {
-    setContentLength(formData.content.length);
+    if (formData.content && typeof formData.content === "string") {
+      setContentLength(formData.content.length);
+    } else {
+      console.error("formData.content is not defined or is not a string");
+    }
   }, [formData.content]);
 
   const handleChange = (e) => {
@@ -104,17 +169,25 @@ const CreateaBlog = () => {
       return;
     }
     try {
+      debugger;
       setLoading(true);
 
       // Handle file uploads
-      const imageUrls =
-        formData.images.length > 0
-          ? await handleFileUpload(formData.images, "images")
-          : [];
-      const videoUrls =
-        formData.videos.length > 0
-          ? await handleFileUpload(formData.videos, "videos")
-          : [];
+      // Initialize default values for imageUrls and videoUrls
+      let imageUrls = [];
+      let videoUrls = [];
+
+      if (!blogId) {
+        // Handle file uploads only if creating a new blog
+        imageUrls =
+          formData.images.length > 0
+            ? await handleFileUpload(formData.images, "images")
+            : [];
+        videoUrls =
+          formData.videos.length > 0
+            ? await handleFileUpload(formData.videos, "videos")
+            : [];
+      }
 
       //user name
       const storedUser =
@@ -136,7 +209,8 @@ const CreateaBlog = () => {
         category: formData.category,
         createdAt: new Date().toISOString(),
         userId: user.uid,
-        userName: name,
+        //name is setting from here
+        userName: userInfo?.name,
       });
 
       showToast("Blog published successfully!", "success");
@@ -170,12 +244,23 @@ const CreateaBlog = () => {
   return (
     <>
       <Navbar />
+      <div
+        className="container-fluid alert alert-primary text-center"
+        role={alert}
+      >
+        <p>
+          We are working on adding the ability to upload images and videos. This
+          feature will be available soon. Stay tuned!
+        </p>
+      </div>
       <div className="container">
         <div className="row">
           <div className="col-12">
-            <h1>Create a Blog</h1>
+            <h1>{blogId ? "Edit Blog" : "Create a Blog"}</h1>
             <p className="mb-5">
-              Start writing your blog with Quilog. It's easy, fast, and secure.
+              {blogId
+                ? "Edit your blog with Quilog. Make the necessary changes."
+                : "Start writing your blog with Quilog. It's easy, fast, and secure."}
             </p>
           </div>
           <div className="col-md-8">
@@ -316,7 +401,7 @@ const CreateaBlog = () => {
                 onClick={handleSubmit}
                 disabled={loading}
               >
-                Publish
+                {blogId ? "Update" : "Publish"}
               </button>
             </div>
           </div>

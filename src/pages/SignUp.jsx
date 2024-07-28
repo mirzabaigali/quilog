@@ -4,7 +4,11 @@ import mainLogo from "../assets/signuplogo.png";
 import google from "../assets/devicon_google.svg";
 import { useNavigate } from "react-router-dom";
 import { auth, db, googleProvider } from "../firebase-client/config";
-import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithPopup,
+  sendEmailVerification,
+} from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
 import showToast from "../utilities/Toast";
 import "./SignUp.css";
@@ -38,26 +42,38 @@ const SignUp = () => {
         return;
       }
       setLoading(true);
-      await createUserWithEmailAndPassword(auth, email, password);
-      const user = auth.currentUser;
-      if (user) {
-        await setDoc(doc(db, "users", user.uid), {
-          name: name,
-          email: email,
-        });
-        showToast("Account created successfully!", "success");
-        navigate("/login");
-        setFormData({ name: "", email: "", password: "" });
-      } else {
-        throw new Error("User not authenticated.");
-      }
+
+      // Create a new user with email and password
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      // Send a verification email
+      await sendEmailVerification(user);
+
+      // Store user information in Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        name: name,
+        email: email,
+      });
+
+      // Notify the user about the verification email
+      showToast(
+        "Account created successfully! Please check your email for a verification link.",
+        "success"
+      );
+      navigate("/login");
+      setFormData({ name: "", email: "", password: "" });
     } catch (error) {
-      // console.error("Error:", error.code, error.message, error);
-      showToast(`${error.message}`, "error");
+      showToast(`Error: ${error.message}`, "error");
     } finally {
       setLoading(false);
     }
   };
+
   // google provideer
   const handleGoogleSignUp = async () => {
     try {
