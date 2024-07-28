@@ -101,7 +101,7 @@ const Login = () => {
         <img src={logo} alt="logo" className="img-fluid logo" />
         <span className="logo-text">Quilog</span>
       </div>
-      <div className="container">
+      <div className="container p-4" style={{padding:"10px"}}>
         <div className="row form-wrapper">
           <div className="col-md-6 form-block mt-5 mb-5">
             <p className="create-acc">Welcome</p>

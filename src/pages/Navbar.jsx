@@ -65,7 +65,7 @@ const Navbar = () => {
             <img src={logo} alt="logo" className="img-fluid logo" />
             <span className="logo-text">Quilog</span>
           </Link>
-          <div className="d-flex align-items-center gap-2">
+          <div className="custom-login">
             {token ? (
               <span
                 className="mainLoginSign"

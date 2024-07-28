@@ -121,7 +121,7 @@ const SignUp = () => {
         <img src={logo} alt="logo" className="img-fluid logo" />
         <span className="logo-text">Quilog</span>
       </div>
-      <div className="container">
+      <div className="container p-4">
         <div className="row form-wrapper">
           <div className="col-md-6 form-block mt-5 mb-5">
             <p className="create-acc">Create an account</p>

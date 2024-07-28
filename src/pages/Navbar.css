@@ -3,6 +3,11 @@
   width: 5rem;
   height: 5rem;
 }
+.custom-login {
+  display: flex;
+  align-items: center;
+  gap: 2;
+}
 .circle {
   width: 100%;
   height: 100%;
@@ -17,7 +22,7 @@
   height: 70%;
   border-radius: 50%;
 }
-.user1{
+.user1 {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -38,4 +43,46 @@
 }
 .border-cust {
   border-bottom: 0.1rem solid #9b9898;
+}
+
+@media (max-width: 480px) {
+  .image-container {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .custom-login {
+    gap: 0.5rem;
+  }
+
+  .mainLoginSign {
+    font-size: 1.8rem;
+    line-height: 2rem;
+  }
+}
+
+@media (max-width: 354px) {
+  .image-container {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .custom-login {
+    gap: 0.3rem;
+  }
+
+  .mainLoginSign {
+    font-size: 1.4rem;
+    line-height: 1.8rem;
+  }
+
+  .user {
+    width: 60%;
+    height: 60%;
+  }
+
+  .user1 {
+    width: 60%;
+    height: 60%;
+  }
 }

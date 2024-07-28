@@ -111,7 +111,7 @@
   line-height: 2.6rem;
   cursor: pointer;
 }
-.load-ani{
+.load-ani {
   position: relative;
   margin: auto;
 }
@@ -145,5 +145,11 @@
   .create-acc,
   .create-text {
     margin-left: 1rem;
+  }
+}
+
+@media (max-width: 336px) {
+  .mainLogo-text {
+    font-size: 3.8rem;
   }
 }
