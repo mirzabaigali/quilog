@@ -1,9 +1,7 @@
-// src/utilities/Comments.jsx
-
-import React, { useEffect, useState } from "react";
+//start
+import React, { useEffect, useState, useCallback } from "react";
 import { db } from "../firebase-client/config";
 import { doc, getDoc, updateDoc, arrayUnion, setDoc } from "firebase/firestore";
-import postimg from "../assets/Vector.png";
 import "./Comments.css";
 import { getAuth } from "firebase/auth";
 
@@ -18,66 +16,65 @@ const Comments = ({ postId }) => {
   const userInfo =
     sessionStorage.getItem("userData") || localStorage.getItem("userData");
   const userObj = userInfo ? JSON.parse(userInfo) : null;
-  // console.log(userObj);
+
+  const fetchCommentsAndUsers = useCallback(async () => {
+    try {
+      const postDoc = await getDoc(doc(db, "blogs", postId));
+      const postData = postDoc.data();
+
+      if (postData && postData.comments) {
+        // Fetch comments
+        const commentDocs = await Promise.all(
+          postData.comments.map((commentId) =>
+            getDoc(doc(db, "comments", commentId))
+          )
+        );
+
+        const commentsData = commentDocs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+          timestamp: doc.data().timestamp.toDate(),
+        }));
+
+        // Fetch user details for all comments
+        const userIds = commentsData.map((comment) => comment.userId);
+        const uniqueUserIds = Array.from(new Set(userIds)); // Remove duplicates
+
+        const userPromises = uniqueUserIds.map((userId) =>
+          getDoc(doc(db, "users", userId)).then((userDoc) => ({
+            id: userId,
+            data: userDoc.data(),
+          }))
+        );
+
+        const usersData = await Promise.all(userPromises);
+        const usersMap = usersData.reduce((acc, user) => {
+          acc[user.id] = user.data; // Store complete user data
+          return acc;
+        }, {});
+
+        setUsers(usersMap);
+
+        // Attach user data to comments
+        const enrichedComments = commentsData.map((commentData) => ({
+          ...commentData,
+          user: usersMap[commentData.userId] || {},
+        }));
+
+        setComments(enrichedComments);
+      } else {
+        setComments([]);
+      }
+    } catch (error) {
+      console.error("Failed to fetch comments:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [postId]);
 
   useEffect(() => {
-    const fetchCommentsAndUsers = async () => {
-      try {
-        const postDoc = await getDoc(doc(db, "blogs", postId));
-        const postData = postDoc.data();
-
-        if (postData && postData.comments) {
-          // Fetch comments
-          const commentDocs = await Promise.all(
-            postData.comments.map((commentId) =>
-              getDoc(doc(db, "comments", commentId))
-            )
-          );
-
-          const commentsData = commentDocs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-            timestamp: doc.data().timestamp.toDate(),
-          }));
-
-          // Fetch user details for all comments
-          const userIds = commentsData.map((comment) => comment.userId);
-          const uniqueUserIds = Array.from(new Set(userIds)); // Remove duplicates
-
-          const userPromises = uniqueUserIds.map((userId) =>
-            getDoc(doc(db, "users", userId)).then((userDoc) => ({
-              id: userId,
-              data: userDoc.data(),
-            }))
-          );
-
-          const usersData = await Promise.all(userPromises);
-          const usersMap = usersData.reduce((acc, user) => {
-            acc[user.id] = user.data; // Store complete user data
-            return acc;
-          }, {});
-
-          setUsers(usersMap);
-
-          // Attach user data to comments
-          const enrichedComments = commentsData.map((commentData) => ({
-            ...commentData,
-            user: usersMap[commentData.userId] || {},
-          }));
-
-          setComments(enrichedComments);
-        } else {
-          setComments([]);
-        }
-      } catch (error) {
-        console.error("Failed to fetch comments:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchCommentsAndUsers();
-  }, [postId]);
+  }, [fetchCommentsAndUsers]);
 
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
@@ -99,21 +96,10 @@ const Comments = ({ postId }) => {
           comments: arrayUnion(commentId),
         });
 
-        // Update local state
-        setComments([
-          ...comments,
-          {
-            comment: newComment,
-            userId: user.uid,
-            user: {
-              name: user.displayName || userObj.name || "Unknown User",
-              photo: user.photoURL || userObj.photo,
-            },
-            timestamp: new Date(),
-            id: commentId,
-          },
-        ]);
-        setNewComment("");
+        // Refresh comments to include the new comment
+        await fetchCommentsAndUsers();
+
+        setNewComment(""); // Clear the input field
       } catch (error) {
         console.error("Failed to submit comment:", error);
       }
@@ -138,22 +124,21 @@ const Comments = ({ postId }) => {
               >
                 Add your comment
               </label>
-              <div className="flex items-center  rounded-lg overflow-hidden">
+              <div className="d-flex align-items-center overflow-hidden">
                 <input
-                  type="text"
                   id="comment"
-                  placeholder="Write a comment..."
+                  type="text"
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
-                  className="fs-5 flex-1 p-2 bg-input text-foreground placeholder:text-muted-foreground focus:outline-none"
-                  style={{ width: "93rem" }}
+                  className="form-control fs-3"
+                  placeholder="Write a comment..."
                 />
-                <button className="btn  btn-primary img_btn">
-                  <img
-                    src={postimg}
-                    alt="icon"
-                    className="text-light send_btn"
-                  />
+                <button
+                  className="btn btn-primary ms-2 fs-3"
+                  type="submit"
+                  disabled={loading}
+                >
+                  Add
                 </button>
               </div>
             </div>
@@ -161,23 +146,23 @@ const Comments = ({ postId }) => {
 
           <ul className="comment-list">
             {comments.length > 0 ? (
-              comments.map((comment, index) => (
-                <li key={index} className="comment-item">
+              comments.map((comment) => (
+                <li key={comment.id} className="comment-item">
                   <div className="comment-header d-flex align-items-center gap-2">
                     <img
-                      src={comment?.user?.photo || "https://placehold.co/100"}
-                      alt={comment?.user?.name || "User"}
+                      src={comment.user.photo || "https://placehold.co/100"}
+                      alt={comment.user.name || "User"}
                       className="user-photo img-thumbnail rounded-circle"
                       style={{ width: "5rem", height: "5rem" }}
                     />
                     <h3>
-                      <strong>{comment?.user?.name || "Unknown User"}</strong>
+                      <strong>{comment.user.name || "Unknown User"}</strong>
                     </h3>
                   </div>
-                  <p>{comment?.comment}</p>
+                  <p>{comment.comment}</p>
                   {comment.timestamp && (
                     <div className="d-flex justify-content-end">
-                      <span>({formatTimestamp(comment?.timestamp)})</span>
+                      <span>({formatTimestamp(comment.timestamp)})</span>
                     </div>
                   )}
                 </li>

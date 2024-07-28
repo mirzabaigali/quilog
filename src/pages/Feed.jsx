@@ -386,7 +386,7 @@ const Feed = () => {
           className="row justify-content-center p-3 border border-1 border-secondary"
           style={{ minHeight: "70vh" }}
         >
-          <div className="d-flex align-items-center">
+          <div className="d-flex justify-content-center align-items-center">
             {loading && <Loading />}
           </div>
           {!loading && posts.length === 0 && (

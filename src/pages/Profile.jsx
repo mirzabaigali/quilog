@@ -1,8 +1,14 @@
-//start
 import React, { useEffect, useState } from "react";
 import Navbar from "./Navbar";
 import EditProfileModal from "./EditProfile";
-import { doc, getDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import { auth, db } from "../firebase-client/config";
 import { useNavigate, useParams } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
@@ -11,14 +17,16 @@ import insta from "../assets/mdi_instagram.svg";
 import linke from "../assets/mdi_linkedin.svg";
 import twit from "../assets/iconoir_twitter.svg";
 import fb from "../assets/circum_facebook.svg";
-import "./Profile.css";
 import showToast from "../utilities/Toast";
+import Loading from "../utilities/Loading";
+import "./Profile.css";
 
 const Profile = () => {
   const { userId } = useParams();
   const [showModal, setShowModal] = useState(false);
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [postCounts, setPostCounts] = useState({ posts: 0, likes: 0 });
   const navigate = useNavigate();
   const authUser = auth.currentUser;
 
@@ -30,6 +38,7 @@ const Profile = () => {
           const userDoc = await getDoc(doc(db, "users", targetUserId));
           if (userDoc.exists()) {
             setUserData(userDoc.data());
+            await fetchPostCounts(targetUserId); // Fetch post counts
           } else {
             showToast("No such document!");
             navigate("/");
@@ -50,8 +59,47 @@ const Profile = () => {
     return () => unsubscribe();
   }, [navigate, userId]);
 
+  const fetchPostCounts = async (userId) => {
+    try {
+      // Fetch posts for the user
+      const postsQuery = query(
+        collection(db, "blogs"),
+        where("userId", "==", userId)
+      );
+      const postsSnapshot = await getDocs(postsQuery);
+      const postIds = postsSnapshot.docs.map((doc) => doc.id);
+      console.log("Post IDs:", postIds); // Debug log
+
+      let totalLikes = 0;
+
+      for (const postId of postIds) {
+        const postDoc = await getDoc(doc(db, "blogs", postId));
+        if (postDoc.exists()) {
+          const postData = postDoc.data();
+          // If 'likes' is an array, count its length
+          if (Array.isArray(postData.likes)) {
+            totalLikes += postData.likes.length;
+          } else {
+            console.warn(`Unexpected 'likes' format for post ID: ${postId}`);
+          }
+        } else {
+          console.warn(`No document found for post ID: ${postId}`);
+        }
+      }
+
+      setPostCounts({ posts: postIds.length, likes: totalLikes });
+    } catch (error) {
+      console.error("Error fetching post counts:", error);
+      showToast(error.message, "error");
+    }
+  };
+
   if (loading) {
-    return <div className="profile-loading">Loading...</div>;
+    return (
+      <div className="profile-loading">
+        <Loading />
+      </div>
+    );
   }
 
   if (!authUser?.uid) {
@@ -72,7 +120,7 @@ const Profile = () => {
     twitter,
     linkedin,
   } = userData || {};
-  console.log(userData);
+
   return (
     <>
       <Navbar />
@@ -109,10 +157,10 @@ const Profile = () => {
                     <div className="row">
                       <div className="col-sm-6">
                         <p className="card-text">
-                          Liked Posts: <strong>50</strong>
+                          Liked Posts: <strong>{postCounts.likes}</strong>
                         </p>
                         <p className="card-text">
-                          My Posts: <strong>10</strong>
+                          My Posts: <strong>{postCounts.posts}</strong>
                         </p>
                       </div>
                     </div>

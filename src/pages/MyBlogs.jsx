@@ -342,19 +342,32 @@ const MyBlogs = () => {
               </div>
             );
           })}
-          <p>
-            <br />
-            <br />
-            Note: This is a demo version and real-time updates are not supported
-            in this environment.
-            <br />
-            <br />
-            If you encounter any issues or need further assistance, feel free to
-            ask.
-            <br />
-            <br />
-            Enjoy your blogging
-          </p>
+          <div class="container mt-5 mb-5">
+            <div
+              class="alert alert-info alert-dismissible fade show"
+              role="alert"
+            >
+              <h4 class="alert-heading">Important Notice</h4>
+              <p class="mb-3">
+                <strong>Note:</strong> This is a demo version and real-time
+                updates are not supported in this environment.
+              </p>
+              <p class="mb-3">
+                If you encounter any issues or need further assistance, feel
+                free to ask.
+              </p>
+              <hr />
+              <p class="mb-0">
+                <strong>Enjoy your blogging!</strong>
+              </p>
+              <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert"
+                aria-label="Close"
+              ></button>
+            </div>
+          </div>
         </div>
       </div>
       {/* </div> */}
