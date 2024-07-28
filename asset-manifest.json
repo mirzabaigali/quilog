@@ -1,0 +1,30 @@
+{
+  "files": {
+    "main.css": "/quilog/static/css/main.88e38c8e.css",
+    "main.js": "/quilog/static/js/main.23e08b5d.js",
+    "static/js/453.ab5f8409.chunk.js": "/quilog/static/js/453.ab5f8409.chunk.js",
+    "static/media/background.jpg": "/quilog/static/media/background.4a094a8cc415f1526c92.jpg",
+    "static/media/signuplogo.png": "/quilog/static/media/signuplogo.4c768b03902d64ed7e98.png",
+    "static/media/devicon_google.svg": "/quilog/static/media/devicon_google.1bcc2aff1e2f1c4d704f7bd54f86bb9c.svg",
+    "static/media/circum_read.svg": "/quilog/static/media/circum_read.5e15d3d019d7549cb27779045dd2784d.svg",
+    "static/media/circum_facebook.svg": "/quilog/static/media/circum_facebook.3ba973424c90b8e8619a484e28cc67cf.svg",
+    "static/media/mdi_instagram.svg": "/quilog/static/media/mdi_instagram.ed707b8d4de468f72848e85c54e07f38.svg",
+    "static/media/ic_baseline-whatsapp.svg": "/quilog/static/media/ic_baseline-whatsapp.f12d7b566955fa7c1bc068cfb75f8871.svg",
+    "static/media/material-symbols-share.svg": "/quilog/static/media/material-symbols-share.4d70146c088354a3d9a53f79dd26a653.svg",
+    "static/media/mdi_linkedin.svg": "/quilog/static/media/mdi_linkedin.bbf1aa26ca72f749d86b144bb84865c6.svg",
+    "static/media/iconoir_twitter.svg": "/quilog/static/media/iconoir_twitter.ac9ddc6f84dbea0b35fc5cbef4261fb0.svg",
+    "static/media/iconamoon-comment-bold.svg": "/quilog/static/media/iconamoon-comment-bold.71e51319ba81b2348432ca19ae3c7724.svg",
+    "static/media/mdi-like.svg": "/quilog/static/media/mdi-like.de9bcada5af66a7676dd7f1115bb8a6e.svg",
+    "static/media/mdi_user.svg": "/quilog/static/media/mdi_user.61b9be5dc50560bd3d757b2bcc3d4d9c.svg",
+    "index.html": "/quilog/index.html",
+    "static/media/ic-baseline-plus.svg": "/quilog/static/media/ic-baseline-plus.f94795c8bac3d277b8fac6006bc15762.svg",
+    "static/media/Ellipse 2.svg": "/quilog/static/media/Ellipse 2.d95b375624f14916c52eaa5af2372107.svg",
+    "main.88e38c8e.css.map": "/quilog/static/css/main.88e38c8e.css.map",
+    "main.23e08b5d.js.map": "/quilog/static/js/main.23e08b5d.js.map",
+    "453.ab5f8409.chunk.js.map": "/quilog/static/js/453.ab5f8409.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.88e38c8e.css",
+    "static/js/main.23e08b5d.js"
+  ]
+}
