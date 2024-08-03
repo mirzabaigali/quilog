@@ -17,6 +17,8 @@ const Login = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const token =
+    localStorage.getItem("token") || sessionStorage.getItem("token");
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -93,7 +95,10 @@ const Login = () => {
 
   useEffect(() => {
     scrollToTop();
-  }, []);
+    if (token) {
+      navigate("/");
+    }
+  }, [token, navigate]);
 
   return (
     <>
@@ -101,7 +106,7 @@ const Login = () => {
         <img src={logo} alt="logo" className="img-fluid logo" />
         <span className="logo-text">Quilog</span>
       </div>
-      <div className="container p-4" style={{padding:"10px"}}>
+      <div className="container p-4" style={{ padding: "10px" }}>
         <div className="row form-wrapper">
           <div className="col-md-6 form-block mt-5 mb-5">
             <p className="create-acc">Welcome</p>
