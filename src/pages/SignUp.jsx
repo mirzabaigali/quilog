@@ -17,6 +17,8 @@ import scrollToTop from "../utilities/ScrollToTop";
 const SignUp = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const token =
+    localStorage.getItem("token") || sessionStorage.getItem("token");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -113,8 +115,11 @@ const SignUp = () => {
     }
   };
   useEffect(() => {
+    if (token) {
+      navigate("/");
+    }
     scrollToTop();
-  }, []);
+  }, [token, navigate]);
   return (
     <>
       <div className="container logo-wrapper" onClick={() => navigate("/")}>
